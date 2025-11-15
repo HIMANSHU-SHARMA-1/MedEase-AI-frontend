@@ -4,10 +4,17 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "vite",
+  "version": 2,
   "rewrites": [
     {
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "builds": [
+      {
+        "src": "client/package.json",
+        "use": "@vercel/static-build"
+      }
+    ]
 }

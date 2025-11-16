@@ -4,7 +4,9 @@ import axios from 'axios';
 // For production: Set VITE_API_URL in Vercel environment variables
 // For local dev: Create .env file with VITE_API_URL=http://localhost:5000
 // IMPORTANT: Vite embeds env vars at BUILD TIME, so variable must be set before build
-const API_URL = import.meta.env.VITE_API_URL || 'https://medease-ai-backend.onrender.com/';
+// Remove trailing slash if present to avoid double slashes in API calls
+const rawUrl = import.meta.env.VITE_API_URL || 'https://medease-ai-backend.onrender.com';
+const API_URL = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
 
 // Always log API URL to help debug (even in production)
 console.log('🔗 API Base URL:', API_URL);

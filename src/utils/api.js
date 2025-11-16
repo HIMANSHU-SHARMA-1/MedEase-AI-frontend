@@ -21,7 +21,7 @@ if (!import.meta.env.VITE_API_URL && import.meta.env.PROD) {
 const api = axios.create({
 	baseURL: API_URL,
 	withCredentials: false,
-	timeout: 30000, // 30 second timeout
+	timeout: 120000, // 120 seconds (2 minutes) - AI interpretation can take 40-60 seconds
 });
 
 api.interceptors.request.use((config) => {

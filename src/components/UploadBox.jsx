@@ -9,8 +9,17 @@ export default function UploadBox() {
 	const [error, setError] = useState('');
 
 	function getFriendlyErrorMessage(err) {
+		// Timeout error
+		if (err.code === 'ECONNABORTED' || err.message?.includes('timeout')) {
+			return 'Analysis is taking longer than expected. The AI is still processing your report. Please wait or try again in a moment.';
+		}
+		
 		// Axios network or CORS error (no response)
 		if (!err.response) {
+			// Check if it's a network error vs timeout
+			if (err.code === 'ERR_NETWORK' || err.code === 'ERR_CONNECTION_REFUSED') {
+				return 'Cannot reach backend. Ensure server is running on the configured URL and CORS allows this origin.';
+			}
 			// Connection refused / CORS blocked
 			return 'Cannot reach backend. Ensure server is running on the configured URL and CORS allows this origin.';
 		}
@@ -59,10 +68,12 @@ export default function UploadBox() {
 				headers: { 'Content-Type': 'multipart/form-data' }
 			});
 
-			// 2) AI interpret
+			// 2) AI interpret (this can take 40-60 seconds, so we use a longer timeout)
 			const { data: ai } = await api.post('/api/ai/interpret', {
 				parsedText: ocr.parsedText,
 				fileName: ocr.fileName
+			}, {
+				timeout: 120000 // 2 minutes for AI processing
 			});
 			navigate(`/result/${ai.diseaseId}`);
 		} catch (e) {

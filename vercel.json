@@ -7,7 +7,7 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/((?!manifest\\.json|sw\\.js|.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)).*)",
+      "source": "/((?!manifest.json|sw.js|.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)).*)",
       "destination": "/index.html"
     }
   ],

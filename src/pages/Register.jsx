@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../utils/api.js';
+import api, { API_URL } from '../utils/api.js';
 
 export default function Register() {
 	const navigate = useNavigate();
@@ -24,8 +24,7 @@ export default function Register() {
 			// Better error handling
 			if (!err.response) {
 				// Network error - backend not reachable
-				const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-				setError(`Cannot connect to backend at ${apiUrl}. Check if server is running and VITE_API_URL is set correctly.`);
+				setError(`Cannot connect to backend at ${API_URL}. Check if server is running and VITE_API_URL is set correctly.`);
 			} else if (err.response.status === 400) {
 				// Validation error
 				setError(err.response.data?.message || 'Invalid registration data. Please check your inputs.');

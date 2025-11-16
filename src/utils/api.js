@@ -57,5 +57,6 @@ api.interceptors.response.use(
 );
 
 export default api;
+export { API_URL }; // Export API_URL so other components can use it
 
 

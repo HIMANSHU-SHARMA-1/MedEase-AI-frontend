@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import api from '../utils/api.js';
+import api, { API_URL } from '../utils/api.js';
 import { useNavigate } from 'react-router-dom';
 
 export default function UploadBox() {
@@ -47,7 +47,7 @@ export default function UploadBox() {
 			try {
 				await api.get('/health', { timeout: 4000 });
 			} catch {
-				setError('Backend not reachable. Start the server (http://localhost:5000) and retry.');
+				setError(`Backend not reachable at ${API_URL}. Check if server is running and VITE_API_URL is set correctly.`);
 				setLoading(false);
 				return;
 			}

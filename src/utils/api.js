@@ -5,9 +5,14 @@ import axios from 'axios';
 // For local dev: Create .env file with VITE_API_URL=http://localhost:5000
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-// Log API URL in development to help debug
-if (import.meta.env.DEV) {
-	console.log('🔗 API Base URL:', API_URL);
+// Always log API URL to help debug (even in production)
+console.log('🔗 API Base URL:', API_URL);
+console.log('🔍 VITE_API_URL env var:', import.meta.env.VITE_API_URL || 'NOT SET');
+
+// Warn if using localhost fallback in production
+if (!import.meta.env.VITE_API_URL && import.meta.env.PROD) {
+	console.error('⚠️ WARNING: VITE_API_URL is not set! Using localhost fallback.');
+	console.error('⚠️ Please set VITE_API_URL in Vercel environment variables and redeploy.');
 }
 
 const api = axios.create({

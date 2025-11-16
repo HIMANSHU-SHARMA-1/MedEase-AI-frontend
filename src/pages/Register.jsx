@@ -20,8 +20,26 @@ export default function Register() {
 			localStorage.setItem('refreshToken', data.refreshToken);
 			localStorage.setItem('role', data.user.role);
 			navigate('/');
-		} catch {
-			setError('Registration failed');
+		} catch (err) {
+			// Better error handling
+			if (!err.response) {
+				// Network error - backend not reachable
+				const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+				setError(`Cannot connect to backend at ${apiUrl}. Check if server is running and VITE_API_URL is set correctly.`);
+			} else if (err.response.status === 400) {
+				// Validation error
+				setError(err.response.data?.message || 'Invalid registration data. Please check your inputs.');
+			} else if (err.response.status === 409) {
+				// User already exists
+				setError('Email already registered. Please login instead.');
+			} else if (err.response.status === 401) {
+				// Unauthorized
+				setError('Registration failed. Please check your credentials.');
+			} else {
+				// Other errors
+				setError(err.response.data?.message || 'Registration failed. Please try again.');
+			}
+			console.error('Registration error:', err);
 		} finally {
 			setLoading(false);
 		}

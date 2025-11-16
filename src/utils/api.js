@@ -1,8 +1,19 @@
 import axios from 'axios';
 
+// Get API URL from environment variable
+// For production: Set VITE_API_URL in Vercel environment variables
+// For local dev: Create .env file with VITE_API_URL=http://localhost:5000
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+// Log API URL in development to help debug
+if (import.meta.env.DEV) {
+	console.log('🔗 API Base URL:', API_URL);
+}
+
 const api = axios.create({
-	baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
-	withCredentials: false
+	baseURL: API_URL,
+	withCredentials: false,
+	timeout: 30000, // 30 second timeout
 });
 
 api.interceptors.request.use((config) => {
@@ -21,7 +32,7 @@ api.interceptors.response.use(
 				const refreshToken = localStorage.getItem('refreshToken');
 				if (!refreshToken) throw new Error('No refresh token');
 				const { data } = await axios.post(
-					(import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api/auth/refresh',
+					API_URL + '/api/auth/refresh',
 					{ refreshToken }
 				);
 				localStorage.setItem('accessToken', data.accessToken);
